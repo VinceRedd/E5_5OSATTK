@@ -19,16 +19,16 @@
 2. [Contexte & périmètre](#2-contexte--périmètre)
 3. [Méthodologie & outillage](#3-méthodologie--outillage)
 4. [Synthèse des vulnérabilités](#4-synthèse-des-vulnérabilités)
-5. [Phase 1 — Reconnaissance & cartographie réseau](#5-phase-1--reconnaissance--cartographie-réseau)
-6. [Phase 2 — Énumération & moisson de comptes](#6-phase-2--énumération--moisson-de-comptes)
-7. [Phase 3 — Analyse stratégique](#7-phase-3--analyse-stratégique)
-8. [Phase 4 — Exploitation](#8-phase-4--exploitation)
-   - [8.1 V01 — Password spraying user=password (hodor)](#81-v01--password-spraying-userpassword-hodor)
-   - [8.2 V02 — Mot de passe en clair en attribut LDAP (samwell)](#82-v02--mot-de-passe-en-clair-en-attribut-ldap-samwell)
-   - [8.3 V03 — Kerberoasting (jon.snow)](#83-v03--kerberoasting-jonsnow)
-   - [8.4 V04 — Exécution de code via xp_cmdshell](#84-v04--exécution-de-code-via-xp_cmdshell)
-   - [8.5 V05 — Élévation locale via SeImpersonatePrivilege (GodPotato)](#85-v05--élévation-locale-via-seimpersonateprivilege-godpotato)
-   - [8.6 V06 — DCSync sur le domaine NORTH](#86-v06--dcsync-sur-le-domaine-north)
+5. [Phase 1 : Reconnaissance & cartographie réseau](#5-phase-1--reconnaissance--cartographie-réseau)
+6. [Phase 2 : Énumération & moisson de comptes](#6-phase-2--énumération--moisson-de-comptes)
+7. [Phase 3 : Analyse stratégique](#7-phase-3--analyse-stratégique)
+8. [Phase 4 : Exploitation](#8-phase-4--exploitation)
+   - [8.1 V01 : Password spraying user=password (hodor)](#81-v01--password-spraying-userpassword-hodor)
+   - [8.2 V02 : Mot de passe en clair en attribut LDAP (samwell)](#82-v02--mot-de-passe-en-clair-en-attribut-ldap-samwell)
+   - [8.3 V03 : Kerberoasting (jon.snow)](#83-v03--kerberoasting-jonsnow)
+   - [8.4 V04 : Exécution de code via xp_cmdshell](#84-v04--exécution-de-code-via-xp_cmdshell)
+   - [8.5 V05 : Élévation locale via SeImpersonatePrivilege (GodPotato)](#85-v05--élévation-locale-via-seimpersonateprivilege-godpotato)
+   - [8.6 V06 : DCSync sur le domaine NORTH](#86-v06--dcsync-sur-le-domaine-north)
 9. [Kill chain consolidée & impact](#9-kill-chain-consolidée--impact)
 10. [Recommandations de remédiation](#10-recommandations-de-remédiation)
 11. [Vulnérabilités identifiées non exploitées](#11-vulnérabilités-identifiées-non-exploitées)
@@ -72,7 +72,7 @@ L'infrastructure auditée se compose de **trois serveurs Windows Server 2019** o
 
 | Hostname | IP | OS | Rôle | Particularité |
 |----------|-----|-----|------|---------------|
-| KINGSLANDING | 192.168.56.10 | Win Server 2019 | DC racine du forêt `sevenkingdoms.local` | Defender ON |
+| KINGSLANDING | 192.168.56.10 | Win Server 2019 | DC racine forêt `sevenkingdoms.local` | Defender ON |
 | WINTERFELL | 192.168.56.11 | Win Server 2019 | DC enfant `north.sevenkingdoms.local` | Defender ON, LDAP anonyme |
 | CASTELBLACK | 192.168.56.22 | Win Server 2019 | Serveur applicatif (IIS + MSSQL + SMB) | Defender OFF, SMB signing OFF |
 
@@ -178,7 +178,7 @@ Le projet a été mené **en binôme avec Clément GRECO**. Nous avons choisi un
 
 ---
 
-## 5. Phase 1 — Reconnaissance & cartographie réseau
+## 5. Phase 1 : Reconnaissance & cartographie réseau
 
 ### 5.1 Découverte des hôtes actifs
 
@@ -248,7 +248,7 @@ sudo nmap -sCV -p- --min-rate 1500 -oN logs/p1-nmap-castelblack-CG-13-05-2026.nm
 
 ---
 
-## 6. Phase 2 — Énumération & moisson de comptes
+## 6. Phase 2 : Énumération & moisson de comptes
 
 ### 6.1 Énumération SMB anonyme
 
@@ -322,7 +322,7 @@ Cette politique autorise des techniques de password spraying à condition de tes
 
 ---
 
-## 7. Phase 3 — Analyse stratégique
+## 7. Phase 3 : Analyse stratégique
 
 À partir des informations collectées en phases 1 et 2, plusieurs vecteurs d'attaque ont été priorisés :
 
@@ -350,7 +350,7 @@ L'enchaînement est conçu pour aller du moins privilégié au plus privilégié
 
 ---
 
-## 8. Phase 4 — Exploitation
+## 8. Phase 4 : Exploitation
 
 ### 8.1 V01 — Password spraying user=password (hodor)
 
@@ -941,7 +941,7 @@ Conformément à la limite de temps de la mission (1 journée), plusieurs vecteu
 | **MSSQL trusted links** | Si des liens de confiance sont configurés entre instances SQL, pivot SQL → SQL avec impersonation | 1-2 h |
 | **Golden Ticket cross-domain** | Le hash `krbtgt` extrait (V06) permet la forge d'un TGT avec ExtraSID = Enterprise Admins du parent → compromission de toute la forêt via `impacket-raiseChild` | 30 min |
 
-Le dernier point (Golden Ticket cross-domain) est particulièrement notable : techniquement, **toute la forêt** `sevenkingdoms.local` est à un script d'écart de la compromission complète, étant donné la quantité d'informations déjà extraites en phase 4.6.
+Le dernier point (Golden Ticket cross-domain) est particulièrement notable : techniquement, **toute la forêt** `sevenkingdoms.local` est à un script d'écart de la compromission complète, étant donné la quantité d'informations déjà extraites en §8.6.
 
 ---
 
