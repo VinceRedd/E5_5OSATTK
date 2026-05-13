@@ -982,7 +982,7 @@ E5_5OSATTK_CACCIATORE/
 │   ├── p4-backdoor-create-CG-13-05-2026.log
 │   ├── p4-dcsync-attempt-sqlsvc-CG-13-05-2026.log
 │   ├── p4-validate-robbstark-CG-13-05-2026.log
-│   └── p4-hashcat-dcc2-CG-13-05-2026.log
+│   ├── p4-hashcat-dcc2-CG-13-05-2026.log
 │   └── history-projet-CACCIATORE-VINCENT.log
 ├── wordlists/
 │   └── north-users-CG-13-05-2026.txt
@@ -993,7 +993,7 @@ E5_5OSATTK_CACCIATORE/
 │   ├── dcc2-robbstark-CG-13-05-2026.hash         (⚠️ exclus)
 │   ├── dcsync-north-CG-13-05-2026.ntds           (⚠️ exclus)  
 │   ├── dcc2-robb-cracked-CG-13-05-2026.txt       (⚠️ exclus)
-│   ├── dcsync-north-CG-13-05-2026.sam            (⚠️ exclus)  
+│   └── dcsync-north-CG-13-05-2026.sam            (⚠️ exclus)  
 └── tools/
     └── GodPotato-CG-13-05-2026.exe                (⚠️exclus)
 ```
@@ -1060,7 +1060,7 @@ Pour l'organisation cible, les actions prioritaires sont les R01 à R06 (cf. § 
 | `hodor` | `hodor` | NORTH | Password spray user=password |
 | `samwell.tarly` | `Heartsbane` | NORTH | Champ `description` AD |
 | `jon.snow` | `iknownothing` | NORTH | Kerberoasting + hashcat |
-| `robb.stark` | sexywolfy | NORTH | DCC2 cache CASTELBLACK → hashcat |
+| `robb.stark` | `sexywolfy` | NORTH | DCC2 cache CASTELBLACK → hashcat |
 | Tous comptes NORTH | (hashs NT) | NORTH | DCSync via robb.stark |
 
 ### 15.2 Hashs NT extraits (DCSync NORTH)
