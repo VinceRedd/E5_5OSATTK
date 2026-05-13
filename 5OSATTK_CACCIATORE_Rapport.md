@@ -1100,11 +1100,11 @@ Hashs anonymisés (le NTDS complet est stocké dans `loot/dcsync-north-CG-13-05-
 | Outil | Version |
 |-------|---------|
 | Nmap | 7.94 |
-| NetExec | 1.x (apt Kali) |
+| NetExec | 1.5.1 (apt Kali) |
 | Impacket | 0.12 |
 | Hashcat | 6.2.6 |
 | enum4linux-ng | 1.3 |
-| smbclient | Samba 4.x |
+| smbclient | Samba 4.24.1 |
 | GodPotato | 1.20 |
 | Kali Linux | 2026.1 |
 
