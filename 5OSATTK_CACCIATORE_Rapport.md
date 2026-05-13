@@ -924,6 +924,7 @@ E5_5OSATTK_CACCIATORE/
 ├── README.md
 ├── 5OSATTK_CACCIATORE_Rapport-13-05-2026.md           ← ce document
 ├── .gitignore
+├── img/
 ├── logs/
 │   ├── p1-discovery-CG-13-05-2026.txt
 │   ├── p1-netexec-smb-CG-13-05-2026.log
