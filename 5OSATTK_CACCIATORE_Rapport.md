@@ -141,18 +141,7 @@ Chaque commande exécutée a été tracée :
 
 Le sujet impose un framework Red Team Windows ; la combinaison **Impacket + NetExec + BloodHound + GodPotato** correspond exactement à la stack utilisée dans la majorité des audits AD professionnels.
 
-### 3.4 Convention de nommage (consigne projet)
-
-Conformément à la consigne, tous les composants produits portent le suffixe `CG-13-05-2026` (initiale de Cacciatore + initiale de Greco + date du TP) :
-
-```
-Repo Git              : E5_5OSATTK_CACCIATORE
-Dossier wordlists     : wordlists/north-users-CG-13-05-2026.txt
-Logs                  : logs/pX-<phase>-CG-13-05-2026.log
-Loot                  : loot/<artifact>-CG-13-05-2026.<ext>
-```
-
-### 3.5 Répartition des tâches au sein du binôme
+### 3.4 Répartition des tâches au sein du binôme
 
 Le projet a été mené **en binôme avec Clément GRECO**. Nous avons choisi un mode de travail en **"pair programming"** plutôt qu'une découpe stricte des phases, pour plusieurs raisons :
 
