@@ -998,15 +998,15 @@ E5_5OSATTK_CACCIATORE/
 ├── wordlists/
 │   └── north-users-CG-13-05-2026.txt
 ├── loot/
-│   ├── kerberoast-CG-13-05-2026.hash             (⚠️ exclus du repo si public)
-│   ├── kerberoast-cracked-CG-13-05-2026.txt      (⚠️ exclus du repo si public)
+│   ├── kerberoast-CG-13-05-2026.hash             (⚠️ exclus)
+│   ├── kerberoast-cracked-CG-13-05-2026.txt      (⚠️ exclus)
 │   ├── secretsdump-castelblack-CG-13-05-2026.txt (⚠️ exclus)
 │   ├── dcc2-robbstark-CG-13-05-2026.hash         (⚠️ exclus)
 │   ├── dcsync-north-CG-13-05-2026.ntds           (⚠️ exclus)  
 │   ├── dcc2-robb-cracked-CG-13-05-2026.txt       (⚠️ exclus)
 │   ├── dcsync-north-CG-13-05-2026.sam            (⚠️ exclus)  
 └── tools/
-    └── GodPotato-CG-13-05-2026.exe                (⚠️exclu)
+    └── GodPotato-CG-13-05-2026.exe                (⚠️exclus)
 ```
 
 ### 13.2 .gitignore
