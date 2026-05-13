@@ -1,9 +1,13 @@
 ﻿# E5_5OSATTK — Projet Pentest Active Directory
 
 **Etudiant :** CACCIATORE Vincent 
+
 **Binôme :** GRECO Clément
+
 **Date :** 13/05/2026  
+
 **Module :** 5OSATTK - ESTIAM Metz - E5
+
 **Cible :** Lab GOAD-Light
 
 ## Structure du repo
