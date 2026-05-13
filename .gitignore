@@ -1,0 +1,33 @@
+﻿# === Données sensibles (jamais sur un repo public) ===
+loot/*.hash
+loot/*-cracked-*.txt
+loot/dcsync-*
+loot/secretsdump-*
+loot/*.ntds
+loot/*.kerberos
+*.ccache
+*.kirbi
+
+# === Sliver / C2 ===
+sliver-data/
+*.implant
+*.beacon
+
+# === Système ===
+.DS_Store
+Thumbs.db
+desktop.ini
+*.swp
+*~
+
+# === Editeurs ===
+.vscode/
+.idea/
+
+# === Python ===
+__pycache__/
+*.pyc
+
+# === Outils clonés ===
+tools/pyGPOAbuse-*/
+tools/impacket/
