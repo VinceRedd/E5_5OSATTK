@@ -1,0 +1,16 @@
+Administrator
+vagrant
+krbtgt
+2026-05-11
+arya.stark
+eddard.stark
+catelyn.stark
+robb.stark
+sansa.stark
+brandon.stark
+rickon.stark
+hodor
+jon.snow
+samwell.tarly
+jeor.mormont
+sql_svc

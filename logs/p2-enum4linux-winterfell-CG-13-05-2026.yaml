@@ -1,0 +1,269 @@
+target:
+  host: 192.168.56.11
+credentials:
+  auth_method: 'null'
+  user: ''
+  password: ''
+  domain: ''
+  ticket_file: ''
+  nthash: ''
+  random_user: mypwnqut
+listeners:
+  LDAP:
+    port: 389
+    accessible: true
+  LDAPS:
+    port: 636
+    accessible: true
+  SMB:
+    port: 445
+    accessible: true
+  SMB over NetBIOS:
+    port: 139
+    accessible: true
+is_parent_dc: true
+is_child_dc: false
+long_domain: sevenkingdoms.local
+domain: NORTH
+nmblookup:
+- WINTERFELL      <00> -         B <ACTIVE>  Workstation Service
+- NORTH           <00> - <GROUP> B <ACTIVE>  Domain/Workgroup Name
+- NORTH           <1c> - <GROUP> B <ACTIVE>  Domain Controllers
+- WINTERFELL      <20> -         B <ACTIVE>  File Server Service
+- NORTH           <1b> -         B <ACTIVE>  Domain Master Browser
+- MAC Address = 08-00-27-E2-DD-B7
+smb_dialects:
+  Supported dialects:
+    SMB 1.0: false
+    SMB 2.0.2: true
+    SMB 2.1: true
+    SMB 3.0: true
+    SMB 3.1.1: true
+  Preferred dialect: SMB 3.0
+  SMB1 only: false
+  SMB signing required: true
+smb_domain_info:
+  NetBIOS computer name: WINTERFELL
+  NetBIOS domain name: NORTH
+  DNS domain: north.sevenkingdoms.local
+  FQDN: winterfell.north.sevenkingdoms.local
+  Derived membership: domain member
+  Derived domain: NORTH
+sessions:
+  sessions_possible: true
+  'null': true
+  password: false
+  Kerberos: false
+  NTLM: false
+  guest: false
+rpc_domain_info:
+  Domain: NORTH
+  Domain SID: S-1-5-21-2441412631-2227122138-1520181883
+  Membership: domain member
+os_info:
+  OS: Windows 10, Windows Server 2019, Windows Server 2016
+  OS version: '10.0'
+  OS release: '1809'
+  OS build: '17763'
+  Native OS: not supported
+  Native LAN manager: not supported
+  Platform id: null
+  Server type: null
+  Server type string: null
+users:
+  '501':
+    username: Guest
+    name: (null)
+    acb: '0x00000215'
+    description: Built-in account for guest access to the computer/domain
+  '1110':
+    username: arya.stark
+    name: (null)
+    acb: '0x00000210'
+    description: Arya Stark
+  '1114':
+    username: sansa.stark
+    name: (null)
+    acb: '0x00000210'
+    description: Sansa Stark
+  '1115':
+    username: brandon.stark
+    name: (null)
+    acb: '0x00010210'
+    description: Brandon Stark
+  '1116':
+    username: rickon.stark
+    name: (null)
+    acb: '0x00000210'
+    description: Rickon Stark
+  '1117':
+    username: hodor
+    name: (null)
+    acb: '0x00000210'
+    description: Brainless Giant
+  '1118':
+    username: jon.snow
+    name: (null)
+    acb: '0x00040210'
+    description: Jon Snow
+  '1119':
+    username: samwell.tarly
+    name: (null)
+    acb: '0x00000210'
+    description: 'Samwell Tarly (Password : Heartsbane)'
+  '1120':
+    username: jeor.mormont
+    name: (null)
+    acb: '0x00000210'
+    description: Jeor Mormont
+  '1121':
+    username: sql_svc
+    name: (null)
+    acb: '0x00000210'
+    description: sql service
+groups:
+  '517':
+    groupname: Cert Publishers
+    type: local
+  '553':
+    groupname: RAS and IAS Servers
+    type: local
+  '571':
+    groupname: Allowed RODC Password Replication Group
+    type: local
+  '572':
+    groupname: Denied RODC Password Replication Group
+    type: local
+  '1102':
+    groupname: DnsAdmins
+    type: local
+  '1109':
+    groupname: AcrossTheSea
+    type: local
+  '546':
+    groupname: Guests
+    type: builtin
+  '555':
+    groupname: Remote Desktop Users
+    type: builtin
+  '556':
+    groupname: Network Configuration Operators
+    type: builtin
+  '558':
+    groupname: Performance Monitor Users
+    type: builtin
+  '559':
+    groupname: Performance Log Users
+    type: builtin
+  '562':
+    groupname: Distributed COM Users
+    type: builtin
+  '568':
+    groupname: IIS_IUSRS
+    type: builtin
+  '569':
+    groupname: Cryptographic Operators
+    type: builtin
+  '573':
+    groupname: Event Log Readers
+    type: builtin
+  '574':
+    groupname: Certificate Service DCOM Access
+    type: builtin
+  '575':
+    groupname: RDS Remote Access Servers
+    type: builtin
+  '576':
+    groupname: RDS Endpoint Servers
+    type: builtin
+  '577':
+    groupname: RDS Management Servers
+    type: builtin
+  '578':
+    groupname: Hyper-V Administrators
+    type: builtin
+  '579':
+    groupname: Access Control Assistance Operators
+    type: builtin
+  '580':
+    groupname: Remote Management Users
+    type: builtin
+  '582':
+    groupname: Storage Replica Administrators
+    type: builtin
+  '554':
+    groupname: Pre-Windows 2000 Compatible Access
+    type: builtin
+  '560':
+    groupname: Windows Authorization Access Group
+    type: builtin
+  '561':
+    groupname: Terminal Server License Servers
+    type: builtin
+  '545':
+    groupname: Users
+    type: builtin
+  '513':
+    groupname: Domain Users
+    type: domain
+  '514':
+    groupname: Domain Guests
+    type: domain
+  '515':
+    groupname: Domain Computers
+    type: domain
+  '520':
+    groupname: Group Policy Creator Owners
+    type: domain
+  '522':
+    groupname: Cloneable Domain Controllers
+    type: domain
+  '525':
+    groupname: Protected Users
+    type: domain
+  '526':
+    groupname: Key Admins
+    type: domain
+  '1103':
+    groupname: DnsUpdateProxy
+    type: domain
+  '1106':
+    groupname: Stark
+    type: domain
+  '1107':
+    groupname: Night Watch
+    type: domain
+  '1108':
+    groupname: Mormont
+    type: domain
+shares: {}
+policy:
+  Domain password information:
+    Password history length: 24
+    Minimum password length: 5
+    Minimum password age: 1 day 4 minutes
+    Maximum password age: 37201 days (101 years) 2 minutes
+    Password properties:
+    - DOMAIN_PASSWORD_COMPLEX: false
+    - DOMAIN_PASSWORD_NO_ANON_CHANGE: false
+    - DOMAIN_PASSWORD_NO_CLEAR_CHANGE: false
+    - DOMAIN_PASSWORD_LOCKOUT_ADMINS: false
+    - DOMAIN_PASSWORD_PASSWORD_STORE_CLEARTEXT: false
+    - DOMAIN_PASSWORD_REFUSE_PASSWORD_CHANGE: false
+  Domain lockout information:
+    Lockout observation window: 5 minutes
+    Lockout duration: 5 minutes
+    Lockout threshold: 5
+  Domain logoff information:
+    Force logoff time: not set
+printers: null
+errors:
+  sessions:
+    enum_sessions:
+    - 'Could not establish guest session: STATUS_LOGON_FAILURE'
+  os_info:
+    enum_os_info:
+    - 'Could not get OS info via ''srvinfo'': STATUS_ACCESS_DENIED'
+  printers:
+    enum_printers:
+    - 'Could not get printer info via ''enumprinters'': STATUS_ACCESS_DENIED'

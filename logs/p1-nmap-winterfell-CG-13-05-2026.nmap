@@ -1,0 +1,90 @@
+# Nmap 7.99 scan initiated Wed May 13 10:57:34 2026 as: /usr/lib/nmap/nmap -sCV -p- --min-rate 1500 -oN logs/p1-nmap-winterfell-CG-13-05-2026.nmap 192.168.56.11
+Nmap scan report for 192.168.56.11
+Host is up (0.025s latency).
+Not shown: 65508 closed tcp ports (reset)
+PORT      STATE SERVICE       VERSION
+53/tcp    open  domain        Simple DNS Plus
+88/tcp    open  kerberos-sec  Microsoft Windows Kerberos (server time: 2026-05-13 08:58:08Z)
+135/tcp   open  msrpc         Microsoft Windows RPC
+139/tcp   open  netbios-ssn   Microsoft Windows netbios-ssn
+389/tcp   open  ldap          Microsoft Windows Active Directory LDAP (Domain: sevenkingdoms.local, Site: Default-First-Site-Name)
+|_ssl-date: 2026-05-13T08:59:11+00:00; 0s from scanner time.
+| ssl-cert: Subject: commonName=winterfell.north.sevenkingdoms.local
+| Subject Alternative Name: othername: 1.3.6.1.4.1.311.25.1:<unsupported>, DNS:winterfell.north.sevenkingdoms.local
+| Not valid before: 2026-05-11T17:19:05
+|_Not valid after:  2027-05-11T17:19:05
+445/tcp   open  microsoft-ds?
+464/tcp   open  kpasswd5?
+593/tcp   open  ncacn_http    Microsoft Windows RPC over HTTP 1.0
+636/tcp   open  ssl/ldap      Microsoft Windows Active Directory LDAP (Domain: sevenkingdoms.local, Site: Default-First-Site-Name)
+|_ssl-date: 2026-05-13T08:59:11+00:00; 0s from scanner time.
+| ssl-cert: Subject: commonName=winterfell.north.sevenkingdoms.local
+| Subject Alternative Name: othername: 1.3.6.1.4.1.311.25.1:<unsupported>, DNS:winterfell.north.sevenkingdoms.local
+| Not valid before: 2026-05-11T17:19:05
+|_Not valid after:  2027-05-11T17:19:05
+3268/tcp  open  ldap          Microsoft Windows Active Directory LDAP (Domain: sevenkingdoms.local, Site: Default-First-Site-Name)
+|_ssl-date: 2026-05-13T08:59:11+00:00; 0s from scanner time.
+| ssl-cert: Subject: commonName=winterfell.north.sevenkingdoms.local
+| Subject Alternative Name: othername: 1.3.6.1.4.1.311.25.1:<unsupported>, DNS:winterfell.north.sevenkingdoms.local
+| Not valid before: 2026-05-11T17:19:05
+|_Not valid after:  2027-05-11T17:19:05
+3269/tcp  open  ssl/ldap      Microsoft Windows Active Directory LDAP (Domain: sevenkingdoms.local, Site: Default-First-Site-Name)
+|_ssl-date: 2026-05-13T08:59:11+00:00; 0s from scanner time.
+| ssl-cert: Subject: commonName=winterfell.north.sevenkingdoms.local
+| Subject Alternative Name: othername: 1.3.6.1.4.1.311.25.1:<unsupported>, DNS:winterfell.north.sevenkingdoms.local
+| Not valid before: 2026-05-11T17:19:05
+|_Not valid after:  2027-05-11T17:19:05
+3389/tcp  open  ms-wbt-server Microsoft Terminal Services
+| ssl-cert: Subject: commonName=winterfell.north.sevenkingdoms.local
+| Not valid before: 2026-05-10T16:35:40
+|_Not valid after:  2026-11-09T16:35:40
+|_ssl-date: 2026-05-13T08:59:11+00:00; 0s from scanner time.
+| rdp-ntlm-info: 
+|   Target_Name: NORTH
+|   NetBIOS_Domain_Name: NORTH
+|   NetBIOS_Computer_Name: WINTERFELL
+|   DNS_Domain_Name: north.sevenkingdoms.local
+|   DNS_Computer_Name: winterfell.north.sevenkingdoms.local
+|   DNS_Tree_Name: sevenkingdoms.local
+|   Product_Version: 10.0.17763
+|_  System_Time: 2026-05-13T08:59:02+00:00
+5985/tcp  open  http          Microsoft HTTPAPI httpd 2.0 (SSDP/UPnP)
+|_http-server-header: Microsoft-HTTPAPI/2.0
+|_http-title: Not Found
+5986/tcp  open  ssl/wsmans?
+|_ssl-date: 2026-05-13T08:59:11+00:00; 0s from scanner time.
+| tls-alpn: 
+|   h2
+|_  http/1.1
+| ssl-cert: Subject: commonName=VAGRANT
+| Subject Alternative Name: DNS:VAGRANT, DNS:vagrant
+| Not valid before: 2026-05-10T09:18:59
+|_Not valid after:  2029-05-09T09:18:59
+9389/tcp  open  mc-nmf        .NET Message Framing
+47001/tcp open  http          Microsoft HTTPAPI httpd 2.0 (SSDP/UPnP)
+|_http-server-header: Microsoft-HTTPAPI/2.0
+|_http-title: Not Found
+49664/tcp open  msrpc         Microsoft Windows RPC
+49665/tcp open  msrpc         Microsoft Windows RPC
+49666/tcp open  msrpc         Microsoft Windows RPC
+49667/tcp open  msrpc         Microsoft Windows RPC
+49671/tcp open  msrpc         Microsoft Windows RPC
+49675/tcp open  ncacn_http    Microsoft Windows RPC over HTTP 1.0
+49676/tcp open  msrpc         Microsoft Windows RPC
+49680/tcp open  msrpc         Microsoft Windows RPC
+49684/tcp open  msrpc         Microsoft Windows RPC
+49717/tcp open  msrpc         Microsoft Windows RPC
+64108/tcp open  msrpc         Microsoft Windows RPC
+Service Info: Host: WINTERFELL; OS: Windows; CPE: cpe:/o:microsoft:windows
+
+Host script results:
+| smb2-time: 
+|   date: 2026-05-13T08:59:02
+|_  start_date: N/A
+|_nbstat: NetBIOS name: WINTERFELL, NetBIOS user: <unknown>, NetBIOS MAC: 08:00:27:e2:dd:b7 (Oracle VirtualBox virtual NIC)
+| smb2-security-mode: 
+|   3.1.1: 
+|_    Message signing enabled and required
+
+Service detection performed. Please report any incorrect results at https://nmap.org/submit/ .
+# Nmap done at Wed May 13 10:59:11 2026 -- 1 IP address (1 host up) scanned in 97.36 seconds

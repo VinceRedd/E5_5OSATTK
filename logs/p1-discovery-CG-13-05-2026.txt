@@ -1,0 +1,14 @@
+# Nmap 7.99 scan initiated Wed May 13 10:49:05 2026 as: /usr/lib/nmap/nmap --privileged -sn -oN logs/p1-discovery-CG-13-05-2026.txt 192.168.56.0/24
+Nmap scan report for 192.168.56.1
+Host is up (0.020s latency).
+Nmap scan report for 192.168.56.10
+Host is up (0.020s latency).
+Nmap scan report for 192.168.56.11
+Host is up (0.020s latency).
+Nmap scan report for 192.168.56.22
+Host is up (0.023s latency).
+Nmap scan report for 192.168.56.100
+Host is up (0.020s latency).
+Nmap scan report for 192.168.56.104
+Host is up (0.020s latency).
+# Nmap done at Wed May 13 10:49:09 2026 -- 256 IP addresses (6 hosts up) scanned in 4.01 seconds

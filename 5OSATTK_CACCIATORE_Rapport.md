@@ -626,7 +626,7 @@ netexec mssql 192.168.56.22 \
 
 ![alt text](image-20.png)
 
-**OBJECTIF ATTEINT — `NT AUTHORITY\SYSTEM` sur CASTELBLACK** !
+**OBJECTIF ATTEINT : `NT AUTHORITY\SYSTEM` sur CASTELBLACK** !
 
 #### Impact
 
@@ -941,8 +941,7 @@ E5_5OSATTK_CACCIATORE/
 │   ├── p4-godpotato-detonation-CG-13-05-2026.log
 │   ├── p4-secretsdump-castelblack-CG-13-05-2026.log
 │   ├── p4-dcsync-north-CG-13-05-2026.log
-│   ├── history-projet-CACCIATORE-VINCENT.log     ← consigne projet
-│   └── git-history-CG-13-05-2026.log
+│   └── history-projet-CACCIATORE-VINCENT-13-05-2026.log
 ├── wordlists/
 │   └── north-users-CG-13-05-2026.txt
 ├── loot/
@@ -950,10 +949,9 @@ E5_5OSATTK_CACCIATORE/
 │   ├── kerberoast-cracked-CG-13-05-2026.txt      (⚠️ exclus du repo si public)
 │   ├── secretsdump-castelblack-CG-13-05-2026.txt (⚠️ exclus)
 │   ├── dcc2-eddard-CG-13-05-2026.hash            (⚠️ exclus)
-│   ├── dcsync-north-CG-13-05-2026.ntds           (⚠️ exclus)
-│   └── README.md
+│   ├── dcsync-north-CG-13-05-2026.ntds           (⚠️ exclus)  
 └── tools/
-    └── GodPotato-CG-13-05-2026.exe                (⚠️)
+    └── GodPotato-CG-13-05-2026.exe                (⚠️exclu)
 ```
 
 ### 13.2 .gitignore
@@ -975,31 +973,11 @@ loot/dcc2-*
 __pycache__/
 ```
 
-### 13.3 Historique Git
-
-Commits réalisés au fur et à mesure :
-
-```
-* init: structure du repo
-* recon: phase 1 - decouverte hotes et cartographie services
-* recon: phase 2 - enum anonyme, decouverte samwell:Heartsbane, recup liste users
-* exploit: V01 - spray user=password reussi (hodor:hodor)
-* exploit: V02 - exposure samwell:Heartsbane confirmee, acces multi-cibles
-* exploit: V03 - kerberoast jon.snow -> sysadmin MSSQL
-* exploit: V04 - xp_cmdshell active, execution sous sql_svc, SeImpersonate confirme
-* exploit: V05 - GodPotato -> NT AUTHORITY\SYSTEM sur CASTELBLACK
-* exploit: V06 - dcsync NORTH, krbtgt + tous les hashs domaine extraits
-* docs: redaction rapport final + schemas
-```
-
-### 13.4 Exports demandés (consigne projet)
+### 13.3 Export demandé
 
 ```bash
 # Historique des commandes shell
 history > logs/history-projet-CACCIATORE-VINCENT.log
-
-# Historique Git
-git log --oneline --graph --all > logs/git-history-CG-13-05-2026.log
 ```
 
 ---

@@ -1,0 +1,13 @@
+MSSQL                    192.168.56.22   1433   CASTELBLACK      [*] Windows 10 / Server 2019 Build 17763 (name:CASTELBLACK) (domain:north.sevenkingdoms.local) (EncryptionReq:False) 
+MSSQL                    192.168.56.22   1433   CASTELBLACK      [+] north.sevenkingdoms.local\jon.snow:iknownothing (Pwn3d!)
+MSSQL                    192.168.56.22   1433   CASTELBLACK      [+] Executed command via mssqlexec
+MSSQL                    192.168.56.22   1433   CASTELBLACK      PRIVILEGES INFORMATION
+MSSQL                    192.168.56.22   1433   CASTELBLACK      ----------------------
+MSSQL                    192.168.56.22   1433   CASTELBLACK      Privilege Name                Description                               State
+MSSQL                    192.168.56.22   1433   CASTELBLACK      ============================= ========================================= ========
+MSSQL                    192.168.56.22   1433   CASTELBLACK      SeAssignPrimaryTokenPrivilege Replace a process level token             Disabled
+MSSQL                    192.168.56.22   1433   CASTELBLACK      SeIncreaseQuotaPrivilege      Adjust memory quotas for a process        Disabled
+MSSQL                    192.168.56.22   1433   CASTELBLACK      SeChangeNotifyPrivilege       Bypass traverse checking                  Enabled
+MSSQL                    192.168.56.22   1433   CASTELBLACK      SeImpersonatePrivilege        Impersonate a client after authentication Enabled
+MSSQL                    192.168.56.22   1433   CASTELBLACK      SeCreateGlobalPrivilege       Create global objects                     Enabled
+MSSQL                    192.168.56.22   1433   CASTELBLACK      SeIncreaseWorkingSetPrivilege Increase a process working set            Disabled

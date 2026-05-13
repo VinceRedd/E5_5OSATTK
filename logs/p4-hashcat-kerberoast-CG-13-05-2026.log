@@ -1,0 +1,81 @@
+hashcat (v7.1.2) starting
+
+You have enabled --force to bypass dangerous warnings and errors!
+This can hide serious problems and should only be done when debugging.
+Do not report hashcat issues encountered when using --force.
+
+Initializing bridges. Please be patient...Initialized bridgesInitializing backend runtimes. Please be patient...Initialized backend runtimesInitializing backend devices. Please be patient...Initialized backend devicesOpenCL API (OpenCL 3.0 PoCL 6.0+debian  Linux, None+Asserts, RELOC, SPIR-V, LLVM 18.1.8, SLEEF, DISTRO, POCL_DEBUG) - Platform #1 [The pocl project]
+====================================================================================================================================================
+* Device #01: cpu-haswell-AMD Ryzen 5 3600 6-Core Processor, 1455/2911 MB (512 MB allocatable), 2MCU
+
+Minimum password length supported by kernel: 0
+Maximum password length supported by kernel: 256
+Minimum salt length supported by kernel: 0
+Maximum salt length supported by kernel: 256
+
+Counting lines in loot/kerberoast-CG-13-05-2026.hash. Please be patient...Counted lines in loot/kerberoast-CG-13-05-2026.hashParsing Hashes: 1/3 (33.33%)...Parsed Hashes: 3/3 (100.00%)Sorting hashes. Please be patient...Sorted hashesRemoving duplicate hashes. Please be patient...Removed duplicate hashesSorting salts. Please be patient...Sorted saltsComparing hashes with potfile entries. Please be patient...Compared hashes with potfile entriesGenerating bitmap tables...Generated bitmap tablesHashes: 3 digests; 3 unique digests, 3 unique salts
+Bitmaps: 16 bits, 65536 entries, 0x0000ffff mask, 262144 bytes, 5/13 rotates
+Rules: 1
+
+Optimizers applied:
+* Zero-Byte
+* Not-Iterated
+
+ATTENTION! Pure (unoptimized) backend kernels selected.
+Pure kernels can crack longer passwords, but drastically reduce performance.
+If you want to switch to optimized kernels, append -O to your commandline.
+See the above message to find out about the exact limits.
+
+Watchdog: Temperature abort trigger set to 90c
+
+Initializing bridge salts. Please be patient...Initialized bridge saltsInitializing device kernels and memory. Please be patient...Initializing backend runtime for device #1. Please be patient...Initialized backend runtime for device #1Host memory allocated for this attack: 512 MB (1985 MB free)
+
+Initialized device kernels and memoryStarting self-test. Please be patient...Finished self-testDictionary cache building /usr/share/wordlists/rockyou.txt: 33553434 bytes (23.98%)Dictionary cache built:
+* Filename..: /usr/share/wordlists/rockyou.txt
+* Passwords.: 14344392
+* Bytes.....: 139921507
+* Keyspace..: 14344385
+* Runtime...: 0 secs
+
+Starting autotune. Please be patient...Finished autotune                                                          [s]tatus [p]ause [b]ypass [c]heckpoint [f]inish [q]uit =>                                                           Cracking performance lower than expected?
+
+* Append -O to the commandline.
+  This lowers the maximum supported password/salt length (usually down to 32).
+
+* Append -w 3 to the commandline.
+  This can cause your screen to lag.
+
+* Append -S to the commandline.
+  This has a drastic speed impact but can be better for specific attacks.
+  Typical scenarios are a small wordlist but a large ruleset.
+
+* Update your backend API runtime / driver the right way:
+  https://hashcat.net/faq/wrongdriver
+
+* Create more work items to make use of your parallelization power:
+  https://hashcat.net/faq/morework
+
+[s]tatus [p]ause [b]ypass [c]heckpoint [f]inish [q]uit =>                                                           Approaching final keyspace - workload adjusted.
+
+[s]tatus [p]ause [b]ypass [c]heckpoint [f]inish [q]uit =>                                                           
+Session..........: hashcat
+Status...........: Exhausted
+Hash.Mode........: 13100 (Kerberos 5, etype 23, TGS-REP)
+Hash.Target......: loot/kerberoast-CG-13-05-2026.hash
+Time.Started.....: Wed May 13 13:08:26 2026, (30 secs)
+Time.Estimated...: Wed May 13 13:08:56 2026, (0 secs)
+Kernel.Feature...: Pure Kernel (password length 0-256 bytes)
+Guess.Base.......: File (/usr/share/wordlists/rockyou.txt)
+Guess.Queue......: 1/1 (100.00%)
+Speed.#01........:  1208.9 kH/s (1.44ms) @ Accel:1024 Loops:1 Thr:1 Vec:8
+Recovered........: 1/3 (33.33%) Digests (total), 1/3 (33.33%) Digests (new), 1/3 (33.33%) Salts
+Progress.........: 43033155/43033155 (100.00%)
+Rejected.........: 0/43033155 (0.00%)
+Restore.Point....: 14344385/14344385 (100.00%)
+Restore.Sub.#01..: Salt:2 Amplifier:0-1 Iteration:0-1
+Candidate.Engine.: Device Generator
+Candidates.#01...:  kristenanne -> $HEX[042a0337c2a156616d6f732103]
+Hardware.Mon.#01.: Util: 93%
+
+Started: Wed May 13 13:07:54 2026
+Stopped: Wed May 13 13:08:57 2026
